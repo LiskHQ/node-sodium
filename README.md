@@ -2,6 +2,8 @@
 
 # node-sodium
 
+Versions 2.0 and above are no longer compatible with Node 0.x. If you're still using an old version of node please use an older version of node-sodium.
+
 Uses Libsodium 1.0.11
 
 Port of the [lib sodium](https://github.com/jedisct1/libsodium) Encryption Library to Node.js.
@@ -35,11 +37,11 @@ A low level API is provided for advanced users. The functions available through 
     var receiver = sodium.crypto_box_keypair();
 
     // Generate random nonce
-    var nonce = new Buffer(sodium.crypto_box_NONCEBYTES);
+    var nonce = Buffer.allocUnsafe(sodium.crypto_box_NONCEBYTES);
     sodium.randombytes_buf(nonce);
 
     // Encrypt
-    var plainText = new Buffer('this is a message');
+    var plainText = Buffer.from('this is a message');
     var cipherMsg = sodium.crypto_box(plainText, nonce, receiver.publicKey, sender.secretKey);
 
     // Decrypt
@@ -74,6 +76,16 @@ Tested on Mac, Linux, Windows and IllumOS Systems
     npm install sodium
 
 node-sodium depends on libsodium, so if libsodium does not compile on your platform chances are `npm install sodium` will fail.
+
+Install can fail in some Linux distros due to permission issues. If you see an error similar to the following:
+
+```
+npm WARN lifecycle sodium@1.2.3~preinstall: cannot run in wd %s %s (wd=%s) sodium@1.2.3 node install.js --preinstall
+```
+
+Try installing with
+
+    npm install sodium --unsafe-perm
 
 Installation will fail if `node-gyp`is not installed on your system. Please run
 
